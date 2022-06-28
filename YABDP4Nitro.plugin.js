@@ -63,9 +63,9 @@ module.exports = (() => {
             return config.info.version;
         }
         load() {
-            BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-                confirmText: "Download Now",
-                cancelText: "Cancel",
+            BdApi.showConfirmationModal("Library Missing", `O plugin de biblioteca necessario para ${config.info.name} não foi encontrado. Clique para baixar agora e instalar automaticamente.`, {
+                confirmText: "Baixar agora",
+                cancelText: "Cancelar",
                 onConfirm: () => {
                     require("request").get("https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js", async (error, response, body) => {
                         if (error) return require("electron").shell.openExternal("https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js");
@@ -97,33 +97,33 @@ module.exports = (() => {
 					"CustomFPSEnabled": false,
 					"CustomFPS": 60,
 					"ResolutionEnabled": false,
-					"CustomResolution": 0
+					"CustomResolution": 1080
                 };
                 settings = PluginUtilities.loadSettings(this.getName(), this.defaultSettings);
                 getSettingsPanel() {
                     return Settings.SettingPanel.build(_ => this.saveAndUpdate(), ...[
-                        new Settings.SettingGroup("Features").append(...[
-                            new Settings.Switch("High Quality Screensharing", "1080p/source @ 60fps screensharing. There is no reason to disable this.", this.settings.screenSharing, value => this.settings.screenSharing = value),
-							new Settings.Switch("Custom Screenshare FPS", "Choose your own screen share FPS!", this.settings.CustomFPSEnabled, value => this.settings.CustomFPSEnabled = value),
+                        new Settings.SettingGroup("Menu de funcionalidades").append(...[
+                            new Settings.Switch("Transmitir a tela em alta qualidade", "Transmitir com 1080p/source @ 60fps. Não há pq vc desativar isso, ok?.", this.settings.screenSharing, value => this.settings.screenSharing = value),
+							new Settings.Switch("FPS da live customizados", "Escolha sua propria quantidade de FPS no compartilhamento!", this.settings.CustomFPSEnabled, value => this.settings.CustomFPSEnabled = value),
 							new Settings.Textbox("FPS", "", this.settings.CustomFPS, 
 							value => {
 								value = parseInt(value, 10);
 								this.settings.CustomFPS = value;
 							}),
-							new Settings.Switch("Custom Screenshare Resolution", "Choose your own screen share resolution!", this.settings.ResolutionEnabled, value => this.settings.ResolutionEnabled = value),
-							new Settings.Textbox("Resolution", "The custom resolution you want (in pixels)", this.settings.CustomResolution, 
+							new Settings.Switch("Qualidade de transmissão customizada ", "Escolha sua própria qualidade de resolução!", this.settings.ResolutionEnabled, value => this.settings.ResolutionEnabled = value),
+							new Settings.Textbox("Resolução", "A resolução que você deseja (Em pixels)", this.settings.CustomResolution, 
 							value => {
 								value = parseInt(value, 10);
 								this.settings.CustomResolution = value;
 							})
                         ]),
-                        new Settings.SettingGroup("Emojis").append(
-                            new Settings.Switch("Nitro Emotes Bypass", "Enable or disable using the emoji bypass.", this.settings.emojiBypass, value => this.settings.emojiBypass = value),
-                            new Settings.Slider("Size", "The size of the emoji in pixels. 48 is the default.", 16, 128, this.settings.emojiSize, size=>this.settings.emojiSize = size, {markers:[16,32,48,64,80,96,112,128], stickToMarkers:true}),
-							new Settings.Switch("Ghost Mode", "Abuses ghost message bug to hide the emoji url. Will not appear to work to those on the Android app.", this.settings.ghostMode, value => this.settings.ghostMode = value),
-							new Settings.Switch("Don't Use Emote Bypass if Emote is Unlocked", "Disable to use emoji bypass even if bypass is not required for that emoji.", this.settings.emojiBypassForValidEmoji, value => this.settings.emojiBypassForValidEmoji = value),
-							new Settings.Switch("Use PNG instead of WEBP", "Use the PNG version of emoji for higher quality!", this.settings.PNGemote, value => this.settings.PNGemote = value),
-							new Settings.Switch("Upload Emotes as Images", "Upload emotes as image(s) after message is sent. (Overrides linking emotes) [Warning: this breaks shit currently, such as replies. Use at your own risk.]", this.settings.uploadEmotes, value => this.settings.uploadEmotes = value)
+                        new Settings.SettingGroup("Configurações de Emojis").append(
+                            new Settings.Switch("Desbloqueio do nitro Emojis", "Ative ou desative o desbloqueio dos emojis.", this.settings.emojiBypass, value => this.settings.emojiBypass = value),
+                            new Settings.Slider("Tamanho", "O tamanho do emoji em pixels. 48 é o padrão.", 16, 128, this.settings.emojiSize, size=>this.settings.emojiSize = size, {markers:[16,32,48,64,80,96,112,128], stickToMarkers:true}),
+							new Settings.Switch("Modo Fantasma", "Abuse do bug de esconder o link dos emojis. Não vai funcionar em quem visualizar a msg em um pocket (Celular android).", this.settings.ghostMode, value => this.settings.ghostMode = value),
+							new Settings.Switch("Não desbloqueie o emote se ele já estiver acessivel", "Disabilite o desbloqueio de emoji se vc não precisar usar.", this.settings.emojiBypassForValidEmoji, value => this.settings.emojiBypassForValidEmoji = value),
+							new Settings.Switch("Use PNG ao invés de WEBP", "usar png para ter algo com mais qualidade!", this.settings.PNGemote, value => this.settings.PNGemote = value),
+							new Settings.Switch("Envie emojis como imagens", "Envie emojis como mensagens. (Escreve por cima do link do emoji) [Perigo: Isso vive dando problema, use por sua conta e risco.]", this.settings.uploadEmotes, value => this.settings.uploadEmotes = value)
 						) 
                     ])
                 }
